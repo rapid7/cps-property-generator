@@ -1,0 +1,5 @@
+source 'https://rubygems.org'
+gem 'aws-sdk-s3', '~> 1.0.0.rc2'
+gem 'rspec'
+gem 'thor'
+gem 'terminal-table'

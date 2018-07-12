@@ -1,0 +1,23 @@
+environments:
+  - 'my-test-env1'
+  - 'my-test-env2'
+
+accounts:
+  - 123456789012
+  - 987654321098
+
+environment_configs:
+  my-test-env1:
+    region: 'us-east-1'
+    account: 123456789012
+    interpolations:
+      region: 'us-east-1'
+      cloud: 'test-cloud-1'
+      domain: 'my1.com'
+  my-test-env2:
+    region: 'eu-central-1'
+    account: 987654321098
+    interpolations:
+      region: 'eu-central-1'
+      cloud: 'test-cloud-2'
+      domain: 'my2.com'

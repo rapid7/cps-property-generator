@@ -1,0 +1,16 @@
+default:
+  database.host: 'my.database.{domain}'
+  database.port: 3306
+
+environments:
+  my-test-env-1:
+    thread.pool.size: 12
+  my-test-env-2:
+    thread.pool.size: 8
+
+#encrypted:
+#  my-test-env-1:
+#   my.encrypted.property:
+#      $ssm:
+#        region: us-east-1
+#        encrypted: PRETEND_ENCRYPTED_PROPERTY_CIPHERTEXT
