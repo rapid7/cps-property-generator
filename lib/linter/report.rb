@@ -21,13 +21,17 @@ module PropertyGenerator
     end
 
     def has_a_test_failed
+      failed = false
       @full_report.each do |test, status|
-        if status[:status] == 'fail' || @files_failing_load != []
-          return true
-        else
-          return false
+        if status[:status] == 'fail'
+          failed = true
         end
       end
+      failed
+    end
+
+    def has_a_file_failed_to_load
+      !@files_failing_load.empty?
     end
 
     def make_failing_to_load_table
