@@ -25,7 +25,7 @@ module PropertyGenerator
 
     def fail_check
       if @report.has_a_test_failed || @report.has_a_file_failed_to_load
-        return true
+        true
       else
         false
       end
