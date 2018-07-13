@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'aws-sdk-s3', '~> 1.0.0.rc2'
   s.add_dependency 'thor'
   s.add_dependency 'terminal-table'
+  s.add_dependency 'thor-scmversion'
 
   s.add_development_dependency 'rspec'
 end
