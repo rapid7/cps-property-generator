@@ -1,7 +1,7 @@
 require_relative 'config'
 require_relative 'globals'
 require_relative 'service'
-require_relative 'helpers'
+require_relative '../helpers/helpers'
 
 module PropertyGenerator
   class Generator

@@ -1,3 +1,4 @@
+require_relative '../helpers/helpers'
 module PropertyGenerator
   require 'yaml'
   class GlobalsLinter
