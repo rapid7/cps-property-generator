@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'cps-property-generator'
-  s.version     = '0.1.2'
+  s.version     = '0.1.3'
   s.date        = '2018-07-12'
   s.summary     = "Centralized Property Service json file generator "
   s.description = "Generates json property files from yaml definitions to be served up by CPS."
