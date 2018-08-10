@@ -108,6 +108,8 @@ encrypted:
 ###### Adding interpolations
 An interpolation is a  value that will be dynamically substituted during generation with the correct value for the environment being generated. Interpolations are declared in the config for a given environment. Once declared an interpolation can be used in a property definition by referencing it in braces. If we were to reference the domain interpolation from the example config above we would use `{domain}`.
 
+Note: values that start with an interpolation must be placed in quotes (ex. "{xxx}.xxx.xxx.{xxx}"). 
+
 ##### Step 4: Generating Your Properties (Using the CLI)
 The bin directory contains the generator.rb cli. An example of running the cli is below. The `project_path` argument specifies the path to the properties repo we are generating a uploading properties from. You must be able to create a session with s3 to upload.
 ```sh
