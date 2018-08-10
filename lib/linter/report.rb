@@ -41,6 +41,9 @@ module PropertyGenerator
       end
       table = Terminal::Table.new :headings => ['Files'], :title => 'Files Failing to Load', :rows => rows, :style => {:width => 200}
       puts table
+      puts "*****************"
+      puts "Check for property values that start with an interpolated value \nIf the first character of the value is a bracket yaml will fail to load \nPlace the value in quotes"
+      puts "*****************"
     end
 
     def make_pass_table
