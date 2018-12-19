@@ -14,6 +14,7 @@ module PropertyGenerator
 
     def run_services_tests
       tests = ['services_have_accepted_keys',
+               'service_environments_are_not_empty',
                'service_defaults_have_no_hashes_as_values',
                'service_environments_match_config_environments',
                'service_environments_have_no_hashes_as_values',
@@ -22,6 +23,25 @@ module PropertyGenerator
                'service_encrypted_region_field_is_accepted']
       results = PropertyGenerator.test_runner(self, tests)
       results
+    end
+
+    def service_environments_are_not_empty
+      status = {status: 'pass', error: ''}
+      services_empty_environments = []
+      @services.each do |path, loaded|
+        unless loaded['environments'] == nil
+          loaded['environments'].each do |environments, properties|
+            if properties == nil
+              services_empty_environments << {path => environments}
+            end
+          end
+        end
+      end
+      if services_empty_environments != []
+        status[:status] = 'fail'
+        status[:error] = "Service files #{services_empty_environments} have empty environments, these should be omitted."
+      end
+      status
     end
 
     def services_have_accepted_keys
