@@ -109,7 +109,7 @@ module PropertyGenerator
         status[:error] = "Service files #{services_with_hashes_in_environments} have environment properties with values as hashes."
       elsif services_with_empty_environments != []
         status[:status] = 'fail'
-        status[:error] = "Service files #{services_with_empty_environments} have empty environemnts, if an environment has no properties remove the environment key."
+        status[:error] = "Service files #{services_with_empty_environments} have empty environments, if an environment has no properties remove the environment key."
       end
       status
     end
