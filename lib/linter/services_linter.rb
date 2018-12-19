@@ -88,12 +88,17 @@ module PropertyGenerator
     def service_environments_have_no_hashes_as_values
       status = {status: 'pass', error: ''}
       services_with_hashes_in_environments = []
+      services_with_empty_environments = []
       @services.each do |path, loaded|
         unless loaded['environments'] == nil
           loaded['environments'].each do |environments, properties|
-            properties.each do |key, value|
-              if value.class == Hash
-                services_with_hashes_in_environments << {path => {environments => key}}
+            if properties == nil
+              services_with_empty_environments << {path => environments}
+            else
+              properties.each do |key, value|
+                if value.class == Hash
+                  services_with_hashes_in_environments << {path => {environments => key}}
+                end
               end
             end
           end
@@ -102,6 +107,9 @@ module PropertyGenerator
       if services_with_hashes_in_environments != []
         status[:status] = 'fail'
         status[:error] = "Service files #{services_with_hashes_in_environments} have environment properties with values as hashes."
+      elsif services_with_empty_environments != []
+        status[:status] = 'fail'
+        status[:error] = "Service files #{services_with_empty_environments} have empty environemnts, if an environment has no properties remove the environment key."
       end
       status
     end
