@@ -158,11 +158,17 @@ module PropertyGenerator
       services_with_unacceptable_keys = []
       @services.each do |path, loaded|
         if loaded['encrypted'] != nil
-          loaded['encrypted'].each do |environment, property|
-            if loaded['encrypted'][environment][property] != nil
-              loaded['encrypted'][environment][property].each do |ssm, keys|
-                unless loaded['encrypted'][environment][property]['$ssm'][keys].keys == accepted_keys
-                  services_with_unacceptable_keys << {path => {environment => property}}
+          loaded['encrypted'].each do |environment, properties|
+            properties.each do |property, value|
+              if value == nil
+                services_with_unacceptable_keys << {path => {environment => property}}
+              else
+                if value['$ssm'] != nil
+                  value['$ssm'].keys.each do |key|
+                    unless accepted_keys.include?(key)
+                      services_with_unacceptable_keys << {path => {environment => property}}
+                    end
+                  end
                 end
               end
             end
@@ -171,7 +177,7 @@ module PropertyGenerator
       end
       if services_with_unacceptable_keys != []
         status[:status] = 'fail'
-        status[:error] = "Service files: #{services_with_unacceptable_keys} have encrypted properties with keys other than 'region' and 'encrypted'."
+        status[:error] = "Service files: #{services_with_unacceptable_keys} have encrypted properties with bad indentation or keys other than 'region' and 'encrypted'."
       end
       status
     end
