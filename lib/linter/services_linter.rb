@@ -154,7 +154,7 @@ module PropertyGenerator
 
     def service_encrypted_fields_are_correct
       status = {status: 'pass', error: ''}
-      accepted_keys = ['region', 'encrypted']
+      accepted_keys = ['region', 'encrypted', 'service']
       services_with_unacceptable_keys = []
       @services.each do |path, loaded|
         if loaded['encrypted'] != nil
