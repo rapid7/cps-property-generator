@@ -13,14 +13,16 @@ module PropertyGenerator
     end
 
     def run_services_tests
-      tests = ['services_have_accepted_keys',
-               'service_environments_are_not_empty',
-               'service_defaults_have_no_hashes_as_values',
-               'service_environments_match_config_environments',
-               'service_environments_have_no_hashes_as_values',
-               'service_encrypted_environments_match_config_environments',
-               'service_encrypted_fields_are_correct',
-               'service_encrypted_region_field_is_accepted']
+      tests = [
+        'services_have_accepted_keys',
+        'service_environments_are_not_empty',
+        'service_defaults_have_no_hashes_as_values',
+        'service_environments_match_config_environments',
+        'service_environments_have_no_hashes_as_values',
+        'service_encrypted_environments_match_config_environments',
+        'service_encrypted_fields_are_correct',
+        'service_encrypted_region_field_is_accepted'
+      ]
       results = PropertyGenerator.test_runner(self, tests)
       results
     end
@@ -161,6 +163,8 @@ module PropertyGenerator
           loaded['encrypted'].each do |environment, properties|
             properties.each do |property, value|
               if value == nil
+                services_with_unacceptable_keys << {path => {environment => property}}
+              elsif value['$ssm'] == nil
                 services_with_unacceptable_keys << {path => {environment => property}}
               else
                 if value['$ssm'] != nil
