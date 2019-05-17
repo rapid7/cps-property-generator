@@ -14,7 +14,6 @@ module PropertyGenerator
       else
         tests = ['config_has_correct_keys',
                  'environment_configs_match_environments_list',
-                 'environment_configs_have_matching_region_and_account_values',
                  'environment_configs_have_well_formatted_interpolations',
                  'config_file_is_present']
       end
@@ -57,23 +56,6 @@ module PropertyGenerator
       if @configs['environments'] != @configs['environment_configs'].keys
         status[:status] = 'fail'
         status[:error] = "Environments in environment_configs do not match environments listed in config environments."
-      end
-      status
-    end
-
-    def environment_configs_have_matching_region_and_account_values
-      status = {status: 'pass', error: ''}
-      environments_missmatch_values = []
-      any_missmatches = false
-      @configs['environment_configs'].keys.each do |environment|
-        unless @configs['environments'].include?(@configs['environment_configs'][environment]['region']) && @configs['accounts'].include?(@configs['environment_configs'][environment]['account'])
-          environments_missmatch_values << environment
-          any_missmatches = true
-        end
-        if any_missmatches
-          status[:status] = 'fail'
-          status[:error] = "Environments: #{environments_missmatch_values} in environment_configs have a region or account value not listed in top level."
-        end
       end
       status
     end
