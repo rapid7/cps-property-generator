@@ -62,8 +62,15 @@ module PropertyGenerator
         account = environmental_configs[env]["account"]
         region = environmental_configs[env]["region"]
         json = JSON.pretty_generate({"properties" => finalized[env]})
-        FileUtils.mkdir_p("#{output_path}/#{account}/#{region}/") unless Dir.exist?("#{output_path}/#{account}/#{region}/")
-        File.write("#{output_path}/#{account}/#{region}/#{service_name}.json", json)
+        #IF users are specifing a vpc then we will drop property files under the dir that corresponds to the vpc
+        if environmental_configs[env].key?("vpc") && !environmental_configs[env]["vpc"].nil?
+          vpc_dir = "#{output_path}/#{account}/#{region}/#{environmental_configs[env]["vpc"]}"
+          FileUtils.mkdir_p("#{vpc_dir}/") unless Dir.exist?(vpc_dir)
+          File.write("#{output_path}/#{account}/#{region}/#{environmental_configs[env]["vpc"]}/#{service_name}.json", json)
+        else
+          FileUtils.mkdir_p("#{output_path}/#{account}/#{region}/") unless Dir.exist?("#{output_path}/#{account}/#{region}/")
+          File.write("#{output_path}/#{account}/#{region}/#{service_name}.json", json)
+        end
         output << "#{output_path}/#{account}/#{region}/#{service_name}.json"
       end
       output
@@ -78,5 +85,17 @@ module PropertyGenerator
       obj.upload_file(file)
     end
 
+    #Force users to specify VPCs for all environments if specified for one environment.
+    #This allows us to skip having conditional logic downstream in CPS requests
+    def config_enforcer(environment_configs)
+      a_vpc_exists = false
+      environment_configs.each do |environment, config|
+        if config.key?("vpc")
+          a_vpc_exists = true
+        elsif a_vpc_exists
+          raise("If you are using VPCs then a VPC must be specified for all environments in the environment_configs")
+        end
+      end
+    end
   end
 end
