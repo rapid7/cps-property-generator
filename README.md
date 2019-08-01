@@ -24,6 +24,7 @@ In the config.yml file we need three keys set to explain our project to the gene
     * The one to one mapping or aws regions to environments.
     * The account a environment lives in.
     * Interpolations for a given environment. Interpolations will be explained in a separate section. 
+4. The `vpc` key can be added under the environment name in the environment configs if you would like to run multiple environments in the same region. If you specify a VPC in one environment then a VPC must be specified in all environments. You can only specify one VPC per environment.
     
 Here is a example config.yml
 ```yaml
