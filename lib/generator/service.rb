@@ -26,17 +26,18 @@ module PropertyGenerator
         #get the map of config for a env
         interpolations = @environment_configs[env]['interpolations']
 
-        #interate through the properties for an environment and gsub the config
-        @service[env].each do | property_key, property_value|
-          property_value_dup = property_value.dup
-          interpolations.each do |matcher_key, matcher_value|
-            if property_value.class == String && property_value_dup.include?("{#{matcher_key}}")
-              @service[env][property_key] = property_value_dup.gsub!("{#{matcher_key}}", matcher_value)
-            end
-          end
-        end
+        # Recursively interate through the properties for an environment and gsub the config
+        # with defined interpolations.
+        interpolate_nested_properties(@service[env], interpolations)
       end
       service
+    end
+
+    def interpolate_nested_properties(service_env, interpolations)
+      interpolations.each do |matcher_key, matcher_value|
+        service_env.each { |k,v|  service_env[k] = v.gsub("{#{matcher_key}}", matcher_value) if v.class == String && v.include?("{#{matcher_key}}")}
+        service_env.values.each { |v| interpolate_nested_properties(v, interpolations)  if v.class == Hash }
+      end
     end
 
     def merge_env_default(data, environments)
