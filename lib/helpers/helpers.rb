@@ -67,11 +67,12 @@ module PropertyGenerator
           vpc_dir = "#{output_path}/#{account}/#{region}/#{environmental_configs[env]["vpc"]}"
           FileUtils.mkdir_p("#{vpc_dir}/") unless Dir.exist?(vpc_dir)
           File.write("#{output_path}/#{account}/#{region}/#{environmental_configs[env]["vpc"]}/#{service_name}.json", json)
+          output << "#{output_path}/#{account}/#{region}/#{environmental_configs[env]["vpc"]}/#{service_name}.json"
         else
           FileUtils.mkdir_p("#{output_path}/#{account}/#{region}/") unless Dir.exist?("#{output_path}/#{account}/#{region}/")
           File.write("#{output_path}/#{account}/#{region}/#{service_name}.json", json)
+          output << "#{output_path}/#{account}/#{region}/#{service_name}.json"
         end
-        output << "#{output_path}/#{account}/#{region}/#{service_name}.json"
       end
       output
     end
