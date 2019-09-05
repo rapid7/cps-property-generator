@@ -14,7 +14,7 @@ module PropertyGenerator
       else
         tests = ['config_has_correct_keys',
                  'environment_configs_match_environments_list',
-                 'environment_configs_have_matching_region_and_account_values',
+                 'environment_configs_have_valid_region_and_account_values',
                  'environment_configs_have_well_formatted_interpolations',
                  'config_file_is_present']
       end
@@ -61,12 +61,12 @@ module PropertyGenerator
       status
     end
 
-    def environment_configs_have_matching_region_and_account_values
+    def environment_configs_have_valid_region_and_account_values
       status = {status: 'pass', error: ''}
       environments_missmatch_values = []
       any_missmatches = false
       @configs['environment_configs'].keys.each do |environment|
-        unless @configs['environments'].include?(@configs['environment_configs'][environment]['region']) && @configs['accounts'].include?(@configs['environment_configs'][environment]['account'])
+        unless (@configs['environment_configs'][environment].key?('region')) && @configs['accounts'].include?(@configs['environment_configs'][environment]['account'])
           environments_missmatch_values << environment
           any_missmatches = true
         end
