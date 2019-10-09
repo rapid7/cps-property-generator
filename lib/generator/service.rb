@@ -1,6 +1,10 @@
 module PropertyGenerator
+
   class Service
+    require 'active_support/core_ext/hash'
+
     attr_accessor :service
+
     def initialize(service_data, config, globals)
       @service_data = service_data
       @environments = config.environments
@@ -57,7 +61,7 @@ module PropertyGenerator
         environment_data = data['environments'][env].dup
         if data['encrypted']
           encrypted = data['encrypted'][env].dup unless data['encrypted'][env].nil?
-          environment_data = data['environments'][env].merge(encrypted) unless encrypted.nil?
+          environment_data = data['environments'][env].deep_merge(encrypted) unless encrypted.nil?
         end
         if default_clone.nil?
           merged = environment_data
@@ -85,6 +89,6 @@ module PropertyGenerator
       output
     end
 
-
   end
+
 end
