@@ -24,7 +24,6 @@ class GeneratorCLI < ::Thor
       else
         generator.upload(out, options)
       end
-
     end
   end
 
