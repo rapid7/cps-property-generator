@@ -15,10 +15,11 @@ module PropertyGenerator
       @configs = PropertyGenerator::Config.new(project_path)
       @globals = PropertyGenerator::Globals.new(project_path, @configs)
       @globals = @globals.globals
+      @accounts = @configs.accounts
+
       @output_path =  "#{File.expand_path(options['output'])}/properties/#{SecureRandom.hex}"
       puts "Properties will be output here #{@output_path}"
       @service_list = PropertyGenerator.read_services(project_path)
-
     end
 
     def generate
@@ -36,6 +37,12 @@ module PropertyGenerator
     end
 
     def upload(out, config)
+      account = config['upload_account']
+
+      if !@accounts.include?(account.to_i)
+        abort("The specified account (#{account}) is not configured, please add it to config/config.yml")
+      end
+
       upload_account = config['upload_account']
       upload_region = config['upload_region']
       upload_bucket = config['upload_bucket']
