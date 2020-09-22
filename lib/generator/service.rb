@@ -10,6 +10,7 @@ module PropertyGenerator
       @environments = config.environments
       @globals = globals
       @environment_configs = config.environment_configs
+      @configmapname = service_data['configname'].nil? ? nil : service_data['configname']
       set_service
     end
 
@@ -20,6 +21,10 @@ module PropertyGenerator
 
     def service
       @service
+    end
+
+    def configmap_name
+      @configmapname
     end
 
     def interpolate
