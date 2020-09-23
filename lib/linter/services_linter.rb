@@ -48,7 +48,7 @@ module PropertyGenerator
 
     def services_have_accepted_keys
       status = {status: 'pass', error: ''}
-      accepted_keys = ['default', 'environments', 'encrypted']
+      accepted_keys = ['default', 'environments', 'encrypted', 'configname']
       services_with_unacceptable_keys = []
       @services.each do |path, loaded|
         loaded.keys.each do |service_key|
@@ -59,7 +59,7 @@ module PropertyGenerator
       end
       if services_with_unacceptable_keys != []
         status[:status] = 'fail'
-        status[:error] = "Service files: #{services_with_unacceptable_keys} have keys other than 'default', 'environments', or 'encrypted'."
+        status[:error] = "Service files: #{services_with_unacceptable_keys} have keys other than 'default', 'environments', 'encrypted', or 'configname'."
       end
       status
     end
