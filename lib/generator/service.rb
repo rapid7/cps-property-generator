@@ -11,12 +11,25 @@ module PropertyGenerator
       @globals = globals
       @environment_configs = config.environment_configs
       @configmapname = service_data['configname'].nil? ? nil : service_data['configname']
+      set_additional_options
       set_service
     end
 
     def set_service
       service_data = merge_env_default(@service_data, @environments)
       @service = merge_service_with_globals(@globals, service_data, @environments)
+    end
+
+    def set_additional_options
+      @additional_options = {}
+      @additional_options['configname'] = @service_data['configname'].nil? ? nil : @service_data['configname']
+      @additional_options['stringdata'] = @service_data['stringdata'].nil? ? nil : @service_data['stringdata']
+      @additional_options['configlabels'] = @service_data['configlabels'].nil? ? nil : @service_data['configlabels']
+      @additional_options['secretlabels'] = @service_data['secretlabels'].nil? ? nil : @service_data['secretlabels']
+    end
+
+    def additional_options
+      @additional_options
     end
 
     def service
