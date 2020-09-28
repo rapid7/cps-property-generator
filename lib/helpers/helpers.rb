@@ -54,18 +54,19 @@ module PropertyGenerator
       end
     end
 
-    def writer(service_name, finalized, configs, output_path, configmap_name)
+    def writer(service_name, finalized, configs, output_path, additional_options)
       output = []
       envs = configs.environments
       environmental_configs =  configs.environment_configs
       envs.each do | env|
         account = environmental_configs[env]["account"]
         region = environmental_configs[env]["region"]
-        json = if configmap_name
-          JSON.pretty_generate({"properties" => finalized[env],"configname" => configmap_name})
-        else
-          JSON.pretty_generate({"properties" => finalized[env]})
+        hash = { "properties" => finalized[env] }
+        ['configname', 'stringdata', 'configlabels', 'secretlabels'].each do |setting|
+        hash[setting] = additional_options[setting] if [setting]
+        puts additional_options[@stringdata]
         end
+          json = JSON.pretty_generate(hash)
         #IF users are specifing a vpc then we will drop property files under the dir that corresponds to the vpc
         if environmental_configs[env].key?("vpc") && !environmental_configs[env]["vpc"].nil?
           vpc_dir = "#{output_path}/#{account}/#{region}/#{environmental_configs[env]["vpc"]}"
