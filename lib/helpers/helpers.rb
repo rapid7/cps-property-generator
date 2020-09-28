@@ -63,9 +63,9 @@ module PropertyGenerator
         region = environmental_configs[env]["region"]
         hash = { "properties" => finalized[env] }
         ['configname', 'stringdata', 'configlabels', 'secretlabels'].each do |setting|
-        hash[setting] = additional_options[setting] if [setting] unless additional_options[setting].nil?
+          hash[setting] = additional_options[setting] if [setting] unless additional_options[setting].nil?
         end
-          json = JSON.pretty_generate(hash)
+        json = JSON.pretty_generate(hash)
         #IF users are specifing a vpc then we will drop property files under the dir that corresponds to the vpc
         if environmental_configs[env].key?("vpc") && !environmental_configs[env]["vpc"].nil?
           vpc_dir = "#{output_path}/#{account}/#{region}/#{environmental_configs[env]["vpc"]}"
