@@ -64,7 +64,6 @@ module PropertyGenerator
         hash = { "properties" => finalized[env] }
         ['configname', 'stringdata', 'configlabels', 'secretlabels'].each do |setting|
         hash[setting] = additional_options[setting] if [setting]
-        puts additional_options[@stringdata]
         end
           json = JSON.pretty_generate(hash)
         #IF users are specifing a vpc then we will drop property files under the dir that corresponds to the vpc
