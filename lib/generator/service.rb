@@ -10,8 +10,8 @@ module PropertyGenerator
       @environments = config.environments
       @globals = globals
       @environment_configs = config.environment_configs
+      set_additional_options
       set_service
-      additional_options
     end
 
     def set_service
@@ -19,11 +19,16 @@ module PropertyGenerator
       @service = merge_service_with_globals(@globals, service_data, @environments)
     end
 
+    def set_additional_options
+      @additional_options = {}
+      @additional_options['configname'] = @service_data['configname'].nil? ? nil : @service_data['configname']
+      @additional_options['stringdata'] = @service_data['stringdata'].nil? ? nil : @service_data['stringdata']
+      @additional_options['configlabels'] = @service_data['configlabels'].nil? ? nil : @service_data['configlabels']
+      @additional_options['secretlabels'] = @service_data['secretlabels'].nil? ? nil : @service_data['secretlabels']
+    end
+
     def additional_options
-      @configname = @service_data['configname'].nil? ? nil : @service_data['configname']
-      @stringdata = @service_data['stringdata'].nil? ? nil : @service_data['stringdata']
-      @configlabels = @service_data['configlabels'].nil? ? nil : @service_data['configlabels']
-      @secretlabels = @service_data['secretlabels'].nil? ? nil : @service_data['secretlabels']
+      @additional_options
     end
 
     def service
