@@ -30,7 +30,7 @@ module PropertyGenerator
         service_instance.service
         service_instance.interpolate
 
-        out = PropertyGenerator.writer(service, service_instance.service, @configs, @output_path, service_instance.configmap_name)
+        out = PropertyGenerator.writer(service, service_instance.service, @configs, @output_path, service_instance.additional_options)
         (output << out).flatten!
       end
       output
