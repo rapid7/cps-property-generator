@@ -47,7 +47,7 @@ module PropertyGenerator
       upload_region = config['upload_region']
       upload_bucket = config['upload_bucket']
 
-      upload_out = out.collect { |file| file.include?("#{upload_account}") && file.include?("#{upload_region}") }
+      upload_out = out.select { |file| file.include?("#{upload_account}") && file.include?("#{upload_region}") }
       upload_out.each_slice(20) do |file_slice|
         file_slice.map do |file|
           Thread.new do
