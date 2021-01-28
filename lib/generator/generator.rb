@@ -47,8 +47,8 @@ module PropertyGenerator
       upload_region = config['upload_region']
       upload_bucket = config['upload_bucket']
 
-      rejected_out = out.reject! { |file| !file.include?("#{upload_account}") || !file.include?("#{upload_region}") }
-      rejected_out.each_slice(20) do |file_slice|
+      upload_out = out.collect { |file| file.include?("#{upload_account}") && file.include?("#{upload_region}") }
+      upload_out.each_slice(20) do |file_slice|
         file_slice.map do |file|
           Thread.new do
             file_region = file.split("/")[-2]
