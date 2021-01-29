@@ -1,1 +1,6 @@
 my_env: 'my-test-env1'
+encrypted:
+  test_encrypted:
+    $ssm:
+      region: region
+      encrypted: encrypted_value

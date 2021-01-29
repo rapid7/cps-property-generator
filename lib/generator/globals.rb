@@ -41,6 +41,11 @@ module PropertyGenerator
         @environments.each do |env|
           next unless File.exists?("#{@project_path}/globals/accounts/#{account}/environments/#{env}.yml")
           data[account][env] = YAML.load_file("#{@project_path}/globals/accounts/#{account}/environments/#{env}.yml")
+          unless data[account][env]['encrypted'].nil?
+            encrypted = data[account][env]['encrypted'].dup
+            not_encrypted = data[account][env].reject { |k,_| k == 'encrypted' }
+            data[account][env] = not_encrypted.merge(encrypted)
+          end
         end
       end
       data

@@ -77,6 +77,21 @@ touch globals.yml
 1. Create a folder called `environments` inside your folder named after your account.
 2. Inside the `environments` folder create a yaml file named after the environment you would like to define globals for. Only environments defined in your config are supported. The environment must also be mapped in the config to the account the sharing the same name as the folder the environment global yaml file lives in. 
 3. In the newly created environment's yaml file you may define your globals.
+###### Encrypted Properties in Environment Globals
+If you would like to pass in an encrypted property to all services in a given environment, you can pass in ckrt encrypted values by having an `encrypted` block in your environment global file.
+```yaml
+property_name_1: value
+property_name_2: value
+encrypted:
+  encrypted_property_1:
+    $ssm:
+      region: region
+      encrypted: encrypted_value
+  encrypted_property_2:
+    $ssm:
+      region: region
+      encrypted: encrypted_value
+```
 
 ##### Step 3: Creating your service definitions
 Service definitions have the highest level of supersedence and will overwrite matching global definitions. 
