@@ -22,7 +22,7 @@ class GeneratorCLI < ::Thor
       if options['upload_account'].nil? || options['upload_region'].nil? && options['upload_bucket'].nil?
         puts 'Please specify upload configs'
       else
-        generator.upload(out, options)
+        #generator.upload(out, options)
       end
     end
   end

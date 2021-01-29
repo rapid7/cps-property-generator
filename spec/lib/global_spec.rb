@@ -16,11 +16,11 @@ module PropertyGenerator
     end
 
     it 'should read the environment globals' do
-      expect(global.get_environment_globals).to eq({123456789012=>{'my-test-env1'=>{'my_env'=>'my-test-env1'}}})
+      expect(global.get_environment_globals).to eq({123456789012=>{'my-test-env1'=>{'my_env'=>'my-test-env1', 'test_encrypted' => { '$ssm' => { 'region' => 'region', 'encrypted' => 'encrypted_value' }}}}})
     end
 
     it 'should condense the globals accurately' do
-      expect(global.condense_globals).to eq({'my-test-env1'=>{'foo' => 'bar', 'my_account'=>123456789012, 'my_env'=>'my-test-env1'},
+      expect(global.condense_globals).to eq({'my-test-env1'=>{'foo' => 'bar', 'my_account'=>123456789012, 'my_env'=>'my-test-env1', 'test_encrypted' => { '$ssm' => { 'region' => 'region', 'encrypted' => 'encrypted_value' }}},
                                              'my-test-env2' => {'foo' => 'bar'}})
     end
 
