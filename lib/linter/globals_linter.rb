@@ -14,7 +14,6 @@ module PropertyGenerator
 
     def run_globals_tests
       tests = ['globals_load_as_hashes',
-               'globals_have_no_hashes_as_values',
                'globals_are_defined_for_valid_environemnts',
                ]
       results = PropertyGenerator.test_runner(self, tests)
