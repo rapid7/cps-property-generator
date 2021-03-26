@@ -156,7 +156,7 @@ module PropertyGenerator
 
     def service_encrypted_fields_are_correct
       status = {status: 'pass', error: ''}
-      accepted_keys = ['region', 'encrypted', 'service']
+      accepted_keys = ['region', 'encrypted', 'service', 'label']
       services_with_unacceptable_keys = []
       @services.each do |path, loaded|
         if loaded['encrypted'] != nil
@@ -181,7 +181,7 @@ module PropertyGenerator
       end
       if services_with_unacceptable_keys != []
         status[:status] = 'fail'
-        status[:error] = "Service files: #{services_with_unacceptable_keys} have encrypted properties with bad indentation or keys other than 'region' and 'encrypted'."
+        status[:error] = "Service files: #{services_with_unacceptable_keys} have encrypted properties with bad indentation or keys other than 'region', 'encrypted' or 'label'."
       end
       status
     end
