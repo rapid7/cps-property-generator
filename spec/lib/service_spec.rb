@@ -17,7 +17,8 @@ module PropertyGenerator
                                           "key1" => "notval1",
                                           "key2" => "val2",
                                           "key3" => "{cloud}-{region}",
-                                          "key4" => "{domain}"
+                                          "key4" => "{domain}",
+                                          "arr" => %w[one two {domain}]
                                         },
                                         "my_account" => 123456789012,
                                         "my_env" => "my-test-env1",
@@ -28,17 +29,24 @@ module PropertyGenerator
                                           }
                                         },
                                         "database.host" => "my.database.{domain}",
-                                        "database.port" => 3306 },
+                                        "database.port" => 3306,
+                                        "thread.pool.size" => 12
+                                      },
                                       "my-test-env2" => {
                                         "foo" => "bar",
                                         "map" => {
                                           "key1" => "notval1",
                                           "key2" => "val2",
                                           "key3" => "{cloud}-{region}",
-                                          "key4" => "{domain}"
+                                          "key4" => "{domain}",
+                                          "arr" => %w[one two {domain}]
                                         },
                                         "database.host" => "my.database.{domain}",
-                                        "database.port" => 3306 } })
+                                        "database.port" => 3306,
+                                        "thread.pool.size" => 8,
+                                        "new_arr" => %w[{region} {cloud} {domain}]
+                                      }
+                                    })
     end
 
     it "Tests interpolations work for a service" do
@@ -49,23 +57,30 @@ module PropertyGenerator
                                               "key1" => "notval1",
                                               "key2" => "val2",
                                               "key3" => "test-cloud-1-us-east-1",
-                                              "key4" => "my1.com"
+                                              "key4" => "my1.com",
+                                              "arr" => %w[one two my1.com]
                                             },
                                             "my_account" => 123456789012,
                                             "my_env" => "my-test-env1",
                                             "test_encrypted" => { "$ssm" => { "region" => "region", "encrypted" => "encrypted_value" } },
                                             "database.host" => "my.database.my1.com",
-                                            "database.port" => 3306 },
+                                            "database.port" => 3306,
+                                            "thread.pool.size" => 12
+                                          },
                                           "my-test-env2" => {
                                             "foo" => "bar",
                                             "map" => {
                                               "key1" => "notval1",
                                               "key2" => "val2",
                                               "key3" => "test-cloud-2-eu-central-1",
-                                              "key4" => "my2.com"
+                                              "key4" => "my2.com",
+                                              "arr" => %w[one two my2.com]
                                             },
                                             "database.host" => "my.database.my2.com",
-                                            "database.port" => 3306 } })
+                                            "database.port" => 3306,
+                                            "thread.pool.size" => 8,
+                                            "new_arr" => %w[eu-central-1 test-cloud-2 my2.com]
+                                          } })
     end
 
   end

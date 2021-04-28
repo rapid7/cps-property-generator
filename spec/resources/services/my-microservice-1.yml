@@ -4,15 +4,23 @@ default:
   map:
     key1: notval1
     key3: '{cloud}-{region}'
+    arr:
+      - one
+      - two
+      - '{domain}'
 
 environments:
-  my-test-env-1:
+  my-test-env1:
     thread.pool.size: 12
-  my-test-env-2:
+  my-test-env2:
     thread.pool.size: 8
+    new_arr:
+      - '{region}'
+      - '{cloud}'
+      - '{domain}'
 
 #encrypted:
-#  my-test-env-1:
+#  my-test-env1:
 #   my.encrypted.property:
 #      $ssm:
 #        region: us-east-1

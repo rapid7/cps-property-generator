@@ -60,7 +60,12 @@ module PropertyGenerator
     def interpolate_nested_properties(service_env, interpolations)
       interpolations.each do |matcher_key, matcher_value|
         service_env.each { |k,v|  service_env[k] = v.gsub("{#{matcher_key}}", matcher_value) if v.class == String && v.include?("{#{matcher_key}}")}
-        service_env.values.each { |v| interpolate_nested_properties(v, interpolations)  if v.class == Hash }
+        service_env.values.each do |v|
+          interpolate_nested_properties(v, interpolations) if v.class == Hash
+          v.each_with_index do |val, idx|
+            v[idx] = val.gsub("{#{matcher_key}}", matcher_value) if val.class == String && val.include?("{#{matcher_key}}")
+          end if v.class == Array
+        end
       end
     end
 
