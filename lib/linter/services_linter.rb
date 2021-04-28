@@ -16,9 +16,7 @@ module PropertyGenerator
       tests = [
         'services_have_accepted_keys',
         'service_environments_are_not_empty',
-        'service_defaults_have_no_hashes_as_values',
         'service_environments_match_config_environments',
-        'service_environments_have_no_hashes_as_values',
         'service_encrypted_environments_match_config_environments',
         'service_encrypted_fields_are_correct',
         'service_encrypted_region_field_is_accepted'
@@ -64,25 +62,6 @@ module PropertyGenerator
       status
     end
 
-    def service_defaults_have_no_hashes_as_values
-      status = {status: 'pass', error: ''}
-      services_with_hashes_in_defaults = []
-      @services.each do |path, loaded|
-        unless loaded['default'] == nil
-          loaded['default'].each do |defaultkey, defaultvalue|
-            if defaultvalue.class == Hash
-              services_with_hashes_in_defaults << {path => defaultkey}
-            end
-          end
-        end
-      end
-      if services_with_hashes_in_defaults != []
-        status[:status] = 'fail'
-        status[:error] = "Service files: #{services_with_hashes_in_defaults} have default properties with values as hashes."
-      end
-      status
-    end
-
     def service_environments_match_config_environments
       status = {status: 'pass', error: ''}
       missmatched_environments = []
@@ -103,29 +82,6 @@ module PropertyGenerator
       if missmatched_environments != []
         status[:status] = 'warn'
         status[:error] = "Service files: #{missmatched_environments} have environments not matching config list."
-      end
-      status
-    end
-
-    def service_environments_have_no_hashes_as_values
-      status = {status: 'pass', error: ''}
-      services_with_hashes_in_environments = []
-      @services.each do |path, loaded|
-        unless loaded['environments'] == nil
-          loaded['environments'].each do |environments, properties|
-            unless properties == nil
-              properties.each do |key, value|
-                if value.class == Hash
-                  services_with_hashes_in_environments << {path => {environments => key}}
-                end
-              end
-            end
-          end
-        end
-      end
-      if services_with_hashes_in_environments != []
-        status[:status] = 'fail'
-        status[:error] = "Service files #{services_with_hashes_in_environments} have environment properties with values as hashes."
       end
       status
     end

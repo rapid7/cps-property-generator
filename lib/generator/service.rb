@@ -50,7 +50,9 @@ module PropertyGenerator
 
         # Recursively interate through the properties for an environment and gsub the config
         # with defined interpolations.
-        interpolate_nested_properties(@service[env], interpolations)
+        service_env = Marshal.load(Marshal.dump(@service[env]))
+        interpolate_nested_properties(service_env, interpolations)
+        @service[env] = service_env
       end
       service
     end
@@ -58,12 +60,17 @@ module PropertyGenerator
     def interpolate_nested_properties(service_env, interpolations)
       interpolations.each do |matcher_key, matcher_value|
         service_env.each { |k,v|  service_env[k] = v.gsub("{#{matcher_key}}", matcher_value) if v.class == String && v.include?("{#{matcher_key}}")}
-        service_env.values.each { |v| interpolate_nested_properties(v, interpolations)  if v.class == Hash }
+        service_env.values.each do |v|
+          interpolate_nested_properties(v, interpolations) if v.class == Hash
+          v.each_with_index do |val, idx|
+            v[idx] = val.gsub("{#{matcher_key}}", matcher_value) if val.class == String && val.include?("{#{matcher_key}}")
+          end if v.class == Array
+        end
       end
     end
 
     def merge_env_default(data, environments)
-      #creates a hash of the enviornments merged with the defaults
+      #creates a hash of the environments merged with the defaults
       # {service => {env1 =>  {properties},
       #             env2 => {properties}
       #           }
@@ -84,7 +91,7 @@ module PropertyGenerator
         if default_clone.nil?
           merged = environment_data
         else
-          merged = default_clone.merge(environment_data)
+          merged = default_clone.deep_merge(environment_data)
         end
         output[env] = merged
       end
@@ -100,7 +107,7 @@ module PropertyGenerator
         if globals_clone[env].nil? || globals_clone[env] == false
           merged = service_data[env]
         else
-          merged = globals_clone[env].merge(service_data[env])
+          merged = globals_clone[env].deep_merge(service_data[env])
         end
         output[env] = merged
       end
