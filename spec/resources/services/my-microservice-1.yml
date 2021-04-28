@@ -1,6 +1,9 @@
 default:
   database.host: 'my.database.{domain}'
   database.port: 3306
+  map:
+    key1: notval1
+    key3: val3
 
 environments:
   my-test-env-1:

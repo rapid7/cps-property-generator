@@ -63,7 +63,7 @@ module PropertyGenerator
     end
 
     def merge_env_default(data, environments)
-      #creates a hash of the enviornments merged with the defaults
+      #creates a hash of the environments merged with the defaults
       # {service => {env1 =>  {properties},
       #             env2 => {properties}
       #           }
@@ -84,7 +84,7 @@ module PropertyGenerator
         if default_clone.nil?
           merged = environment_data
         else
-          merged = default_clone.merge(environment_data)
+          merged = default_clone.deep_merge(environment_data)
         end
         output[env] = merged
       end
@@ -100,7 +100,7 @@ module PropertyGenerator
         if globals_clone[env].nil? || globals_clone[env] == false
           merged = service_data[env]
         else
-          merged = globals_clone[env].merge(service_data[env])
+          merged = globals_clone[env].deep_merge(service_data[env])
         end
         output[env] = merged
       end

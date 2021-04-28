@@ -44,7 +44,7 @@ module PropertyGenerator
           unless data[account][env]['encrypted'].nil?
             encrypted = data[account][env]['encrypted'].dup
             not_encrypted = data[account][env].reject { |k,_| k == 'encrypted' }
-            data[account][env] = not_encrypted.merge(encrypted)
+            data[account][env] = not_encrypted.deep_merge(encrypted)
           end
         end
       end
@@ -67,7 +67,7 @@ module PropertyGenerator
         env_global.each do |env, hash|
           account_globals[account] ||= {}
           # set the environment globals to be the account global merged with the env globals
-          env_global[env] = account_globals[account].merge(hash) unless hash.empty?
+          env_global[env] = account_globals[account].deep_merge(hash) unless hash.empty?
           condensed[env] = env_global[env]
         end
       end
@@ -80,7 +80,7 @@ module PropertyGenerator
           # We need to merge into the globals so any env configs overwrite main global configs.
           # Dup so we dont modify the original object
           main_global_dup = main_global.dup
-          condensed[env] = main_global_dup.merge(condensed[env])
+          condensed[env] = main_global_dup.deep_merge(condensed[env])
         end
       end
       condensed

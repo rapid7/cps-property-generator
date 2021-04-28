@@ -8,7 +8,7 @@ module PropertyGenerator
     subject(:global) {described_class.new(File.expand_path("./spec/resources"), config)}
 
     it 'should read the main global file' do
-      expect(global.get_main_global).to eq({'foo'=>'bar'})
+      expect(global.get_main_global).to eq({'foo'=>'bar', 'map' => {'key1' => 'val1', 'key2' => 'val2', 'key4' => '{domain}'}})
     end
 
     it 'should read the account globals' do
@@ -20,8 +20,30 @@ module PropertyGenerator
     end
 
     it 'should condense the globals accurately' do
-      expect(global.condense_globals).to eq({'my-test-env1'=>{'foo' => 'bar', 'my_account'=>123456789012, 'my_env'=>'my-test-env1', 'test_encrypted' => { '$ssm' => { 'region' => 'region', 'encrypted' => 'encrypted_value' }}},
-                                             'my-test-env2' => {'foo' => 'bar'}})
+      expect(global.condense_globals).to eq({'my-test-env1'=>{
+        'foo' => 'bar',
+        'map' => {
+          'key1' => 'val1',
+          'key2' => 'val2',
+          'key4' => '{domain}'
+        },
+        'my_account'=>123456789012,
+        'my_env'=>'my-test-env1',
+        'test_encrypted' => {
+          '$ssm' => {
+            'region' => 'region',
+            'encrypted' => 'encrypted_value'
+          }
+        }
+      },
+      'my-test-env2' => {
+        'foo' => 'bar',
+        'map' => {
+          'key1' => 'val1',
+          'key2' => 'val2',
+          'key4' => '{domain}'
+        }
+      }})
     end
 
   end
