@@ -50,7 +50,9 @@ module PropertyGenerator
 
         # Recursively interate through the properties for an environment and gsub the config
         # with defined interpolations.
-        interpolate_nested_properties(@service[env], interpolations)
+        service_env = Marshal.load(Marshal.dump(@service[env]))
+        interpolate_nested_properties(service_env, interpolations)
+        @service[env] = service_env
       end
       service
     end

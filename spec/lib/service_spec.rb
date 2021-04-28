@@ -16,7 +16,7 @@ module PropertyGenerator
                                         "map" => {
                                           "key1" => "notval1",
                                           "key2" => "val2",
-                                          "key3" => "val3",
+                                          "key3" => "{cloud}-{region}",
                                           "key4" => "{domain}"
                                         },
                                         "my_account" => 123456789012,
@@ -34,7 +34,7 @@ module PropertyGenerator
                                         "map" => {
                                           "key1" => "notval1",
                                           "key2" => "val2",
-                                          "key3" => "val3",
+                                          "key3" => "{cloud}-{region}",
                                           "key4" => "{domain}"
                                         },
                                         "database.host" => "my.database.{domain}",
@@ -48,7 +48,7 @@ module PropertyGenerator
                                             "map" => {
                                               "key1" => "notval1",
                                               "key2" => "val2",
-                                              "key3" => "val3",
+                                              "key3" => "test-cloud-1-us-east-1",
                                               "key4" => "my1.com"
                                             },
                                             "my_account" => 123456789012,
@@ -61,7 +61,7 @@ module PropertyGenerator
                                             "map" => {
                                               "key1" => "notval1",
                                               "key2" => "val2",
-                                              "key3" => "val3",
+                                              "key3" => "test-cloud-2-eu-central-1",
                                               "key4" => "my2.com"
                                             },
                                             "database.host" => "my.database.my2.com",

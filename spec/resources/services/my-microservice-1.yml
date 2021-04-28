@@ -3,7 +3,7 @@ default:
   database.port: 3306
   map:
     key1: notval1
-    key3: val3
+    key3: '{cloud}-{region}'
 
 environments:
   my-test-env-1:
