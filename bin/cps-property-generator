@@ -13,17 +13,19 @@ class GeneratorCLI < ::Thor
   option 'upload_account', banner: 'UPLOAD_ACCOUNT', type: :string, desc: 'The account you are uploading properties to'
   option 'upload_region', banner: 'UPLOAD_REGION', type: :string, desc: 'The region your property bucket is in'
   option 'upload_bucket', banner: 'UPLOAD_BUCKET', type: :string, desc: 'The bucket you are uploading properties to.'
+  option 'upload_all', banner: 'UPLOAD_ALL', type: :boolean, desc: 'Whether to upload all envs and accounts to a single bucket', :default => false
 
   def generate
 
     generator = PropertyGenerator::Generator.new(options)
     out = generator.generate
     if options['upload']
-      if options['upload_account'].nil? || options['upload_region'].nil? && options['upload_bucket'].nil?
-        puts 'Please specify upload configs'
-      else
-        generator.upload(out, options)
-      end
+      abort('Did not specify an upload bucket') if options['upload_bucket'].nil?
+      abort('Did not specify an upload region') if options['upload_region'].nil?
+
+      abort('Did not specify upload configs') if !options['upload_all'] && options['upload_account'].nil?
+
+      generator.upload(out, options)
     end
   end
 

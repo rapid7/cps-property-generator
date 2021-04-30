@@ -37,22 +37,33 @@ module PropertyGenerator
     end
 
     def upload(out, config)
-      account = config['upload_account']
-
-      if !@accounts.include?(account.to_i)
-        abort("The specified account (#{account}) is not configured, please add it to config/config.yml")
-      end
-
-      upload_account = config['upload_account']
-      upload_region = config['upload_region']
       upload_bucket = config['upload_bucket']
+      upload_region = config['upload_region']
 
-      upload_out = out.select { |file| file.include?("#{upload_account}") && file.include?("#{upload_region}") }
-      upload_out.each_slice(20) do |file_slice|
+      if config['upload_all']
+        _upload_files(out.sort) do |file|
+          file_region = file.split("/")[-2]
+          file_account = file.split("/")[-3]
+
+          PropertyGenerator.sync(upload_region, file_account, upload_bucket, file, file_region)
+        end
+      else
+        upload_account = config['upload_account']
+        abort("The specified account (#{upload_account}) is not configured, please add it to config/config.yml") unless @accounts.include?(upload_account)
+
+        upload_out = out.select { |file| file.include?("#{upload_account}") && file.include?("#{upload_region}") }
+        _upload_files(upload_out) do |file|
+          file_region = file.split("/")[-2]
+          PropertyGenerator.sync(upload_region, upload_account, upload_bucket, file, file_region)
+        end
+      end
+    end
+
+    def _upload_files(files)
+      files.each_slice(20) do |file_slice|
         file_slice.map do |file|
           Thread.new do
-            file_region = file.split("/")[-2]
-            PropertyGenerator.sync(upload_region, upload_account, upload_bucket, file, file_region)
+            yield file
           end
         end.each(&:join)
       end
