@@ -48,8 +48,10 @@ module PropertyGenerator
           PropertyGenerator.sync(upload_region, file_account, upload_bucket, file, file_region)
         end
       else
-        upload_account = config['upload_account']
-        abort("The specified account (#{upload_account}) is not configured, please add it to config/config.yml") unless @accounts.include?(upload_account)
+        upload_account = config['upload_account'].strip
+        unless @accounts.map { |a| a.to_s.strip }.include?(upload_account)
+          abort("The specified account (#{upload_account}) is not configured, please add it to config/config.yml")
+        end
 
         upload_out = out.select { |file| file.include?("#{upload_account}") && file.include?("#{upload_region}") }
         _upload_files(upload_out) do |file|
