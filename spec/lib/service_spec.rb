@@ -18,7 +18,8 @@ module PropertyGenerator
                                           'key2' => 'val2',
                                           'key3' => '{cloud}-{region}',
                                           'key4' => '{domain}',
-                                          'arr' => %w[one two {domain}]
+                                          'arr' => %w[one two {domain}],
+                                          'hash' => '2533cc7'
                                         },
                                         'my_account' => 123456789012,
                                         'my_env' => 'my-test-env1',
@@ -39,7 +40,8 @@ module PropertyGenerator
                                           'key2' => 'val2',
                                           'key3' => '{cloud}-{region}',
                                           'key4' => '{domain}',
-                                          'arr' => %w[one two {domain}]
+                                          'arr' => %w[one two {domain}],
+                                          'hash' => 'e501c28'
                                         },
                                         'database.host' => 'my.database.{domain}',
                                         'database.port' => 3306,
@@ -80,7 +82,8 @@ module PropertyGenerator
                                               'key2' => 'val2',
                                               'key3' => 'test-cloud-2-eu-central-1',
                                               'key4' => 'my2.com',
-                                              'arr' => %w[one two my2.com]
+                                              'arr' => %w[one two my2.com],
+                                              'hash' => 'e501c28'
                                             },
                                             'database.host' => 'my.database.my2.com',
                                             'database.port' => 3306,

@@ -1,3 +1,7 @@
+env1_assets: &env1_assets
+  hash: 2533cc7
+env2_assets: &env2_assets
+  hash: e501c28
 default:
   database.host: 'my.database.{domain}'
   database.port: 3306
@@ -12,8 +16,12 @@ default:
 environments:
   my-test-env1:
     thread.pool.size: 12
+    map:
+      <<: *env1_assets
   my-test-env2:
     thread.pool.size: 8
+    map:
+      <<: *env2_assets
     new_arr:
       - '{region}'
       - '{cloud}'
