@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'thor-scmversion'
 
   s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rubocop'
 end
