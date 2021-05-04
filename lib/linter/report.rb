@@ -39,45 +39,44 @@ module PropertyGenerator
       @files_failing_load.each do |failed|
         rows << [failed]
       end
-      table = Terminal::Table.new :headings => ['Files'], :title => 'Files Failing to Load', :rows => rows, :style => {:width => 200}
+      table = Terminal::Table.new :headings => ['Files'], :title => 'Files Failing to Load', :rows => rows, :style => { :width => 200 }
       puts table
-      puts "*****************"
+      puts '*****************'
       puts "Check for property values that start with an interpolated value \nIf the first character of the value is a bracket yaml will fail to load \nPlace the value in quotes"
-      puts "*****************"
+      puts '*****************'
     end
 
     def make_pass_table
       rows = []
-      @full_report.each do |test,status|
+      @full_report.each do |test, status|
         if status[:status] == 'pass'
           rows << [test.gsub('_', ' ')]
         end
       end
-      table = Terminal::Table.new :headings => ['Test'], :title => 'Passing Tests', :rows => rows, :style => {:width => 200}
+      table = Terminal::Table.new :headings => ['Test'], :title => 'Passing Tests', :rows => rows, :style => { :width => 200 }
       puts table
     end
 
     def make_warn_table
       rows = []
-      @full_report.each do |test,status|
+      @full_report.each do |test, status|
         if status[:status] == 'warn'
           rows << [test.gsub('_', ' '), status[:error].scan(/.{1,90}/).join("\n")]
         end
       end
-      table = Terminal::Table.new :headings => ['Test', 'Error'], :title => 'Warning Tests', :rows => rows, :style => {:width => 200}
+      table = Terminal::Table.new :headings => ['Test', 'Error'], :title => 'Warning Tests', :rows => rows, :style => { :width => 200 }
       puts table
     end
 
     def make_fail_table
       rows = []
-      @full_report.each do |test,status|
+      @full_report.each do |test, status|
         if status[:status] == 'fail'
           rows << [test.gsub('_', ' '), status[:error].scan(/.{1,90}/).join("\n")]
         end
       end
-      table = Terminal::Table.new :headings => ['Test', 'Error'], :title => 'Failing Tests', :rows => rows, :style => {:width => 200}
+      table = Terminal::Table.new :headings => ['Test', 'Error'], :title => 'Failing Tests', :rows => rows, :style => { :width => 200 }
       puts table
     end
-
   end
 end

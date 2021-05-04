@@ -1,16 +1,15 @@
 module PropertyGenerator
-  require_relative 'config_linter.rb'
-  require_relative 'globals_linter.rb'
-  require_relative 'services_linter.rb'
-  require_relative 'report.rb'
+  require_relative 'config_linter'
+  require_relative 'globals_linter'
+  require_relative 'services_linter'
+  require_relative 'report'
   class Linter
-
     def initialize(path)
       ignore_list = ['README.md']
       invalid_paths = PropertyGenerator.invalid_paths(path, ignore_list)
-      @config_linter = PropertyGenerator::ConfigLinter.new(path+"/config/config.yml")
-      @globals_linter = PropertyGenerator::GlobalsLinter.new(path+"/globals/", @config_linter.configs)
-      @services_linter = PropertyGenerator::ServicesLinter.new(path+"/services/", @config_linter.configs)
+      @config_linter = PropertyGenerator::ConfigLinter.new("#{path}/config/config.yml")
+      @globals_linter = PropertyGenerator::GlobalsLinter.new("#{path}/globals/", @config_linter.configs)
+      @services_linter = PropertyGenerator::ServicesLinter.new("#{path}/services/", @config_linter.configs)
       @report = PropertyGenerator::Report.new(invalid_paths)
     end
 
@@ -34,6 +33,5 @@ module PropertyGenerator
     def display_report
       @report.display_report
     end
-
   end
 end

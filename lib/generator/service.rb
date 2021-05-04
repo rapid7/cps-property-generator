@@ -1,9 +1,9 @@
 module PropertyGenerator
-
   class Service
     require 'active_support/core_ext/hash'
 
     attr_accessor :service
+    attr_reader :additional_options
 
     def initialize(service_data, config, globals)
       @service_data = service_data
@@ -28,24 +28,16 @@ module PropertyGenerator
       @additional_options['secretlabels'] = @service_data['secretlabels'].nil? ? nil : @service_data['secretlabels']
     end
 
-    def additional_options
-      @additional_options
-    end
-
-    def service
-      @service
-    end
-
     def configmap_name
       @configmapname
     end
 
     def interpolate
       environments = @environments
-      #read in config
-      #interate through environment and substitute config for values for that environment
-      environments.each do | env|
-        #get the map of config for a env
+      # read in config
+      # interate through environment and substitute config for values for that environment
+      environments.each do |env|
+        # get the map of config for a env
         interpolations = @environment_configs[env]['interpolations']
 
         # Recursively interate through the properties for an environment and gsub the config
@@ -59,7 +51,7 @@ module PropertyGenerator
 
     def interpolate_nested_properties(service_env, interpolations)
       interpolations.each do |matcher_key, matcher_value|
-        service_env.each { |k,v|  service_env[k] = v.gsub("{#{matcher_key}}", matcher_value) if v.class == String && v.include?("{#{matcher_key}}")}
+        service_env.each { |k, v| service_env[k] = v.gsub("{#{matcher_key}}", matcher_value) if v.class == String && v.include?("{#{matcher_key}}") }
         service_env.values.each do |v|
           interpolate_nested_properties(v, interpolations) if v.class == Hash
           v.each_with_index do |val, idx|
@@ -70,7 +62,7 @@ module PropertyGenerator
     end
 
     def merge_env_default(data, environments)
-      #creates a hash of the environments merged with the defaults
+      # creates a hash of the environments merged with the defaults
       # {service => {env1 =>  {properties},
       #             env2 => {properties}
       #           }
@@ -80,7 +72,7 @@ module PropertyGenerator
 
       environments.each do |env|
         default_clone = default.dup
-        #if nil, use set to environments as nothing to merge env with
+        # if nil, use set to environments as nothing to merge env with
         data['environments'] ||= {}
         data['environments'][env] ||= {}
         environment_data = data['environments'][env].dup
@@ -99,7 +91,7 @@ module PropertyGenerator
     end
 
     def merge_service_with_globals(globals_data, service_data, environments)
-      #service will now overwrite globals, merging will be done for each environment
+      # service will now overwrite globals, merging will be done for each environment
       output = {}
       envs = environments
       envs.each do |env|
@@ -113,7 +105,5 @@ module PropertyGenerator
       end
       output
     end
-
   end
-
 end
