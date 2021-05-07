@@ -4,9 +4,15 @@ module PropertyGenerator
   require 'yaml'
   require 'pathname'
   class GlobalsLinter
-    def initialize(path, configs)
+    TESTS = [
+      'globals_load_as_hashes',
+      'globals_are_defined_for_valid_environemnts'
+    ].freeze
+
+    def initialize(path, configs, ignored_tests)
       @configs = configs
       @globals = {}
+      @ignored_tests = ignored_tests
       valid_paths = PropertyGenerator.valid_paths(path)
       valid_paths.each do |file_path|
         @globals[file_path] = YAML.load_file(file_path)
@@ -14,10 +20,7 @@ module PropertyGenerator
     end
 
     def run_globals_tests
-      tests = [
-        'globals_load_as_hashes',
-        'globals_are_defined_for_valid_environemnts'
-      ]
+      tests = TESTS - @ignored_tests
 
       PropertyGenerator.test_runner(self, tests)
     end

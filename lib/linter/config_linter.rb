@@ -1,24 +1,28 @@
 module PropertyGenerator
   require 'yaml'
   class ConfigLinter
+    TESTS = [
+      'config_has_correct_keys',
+      'environment_configs_match_environments_list',
+      'environment_configs_have_valid_region_and_account_values',
+      'environment_configs_have_well_formatted_interpolations',
+      'config_file_is_present'
+    ].freeze
+
     attr_accessor :configs
 
-    def initialize(path)
+    def initialize(path, ignored_tests)
       @configs = check_for_config(path)
+      @ignored_tests = ignored_tests
     end
 
     def run_config_tests
       if @configs == {}
         tests = ['config_file_is_present']
       else
-        tests = [
-          'config_has_correct_keys',
-          'environment_configs_match_environments_list',
-          'environment_configs_have_valid_region_and_account_values',
-          'environment_configs_have_well_formatted_interpolations',
-          'config_file_is_present'
-        ]
+        tests = TESTS
       end
+      tests -= @ignored_tests
 
       PropertyGenerator.test_runner(self, tests)
     end

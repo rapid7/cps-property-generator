@@ -2,9 +2,10 @@ module PropertyGenerator
   require 'terminal-table'
 
   class Report
-    def initialize(files_failing_load)
+    def initialize(files_failing_load, ignored_tests)
       @files_failing_load = files_failing_load
       @full_report = {}
+      @ignored_tests = ignored_tests
     end
 
     def add_report(report)
@@ -12,12 +13,16 @@ module PropertyGenerator
     end
 
     def display_report
-      if @files_failing_load != []
-        make_failing_to_load_table
+      unless @files_failing_load.empty?
+        puts make_failing_to_load_table
+        puts '*****************'
+        puts "Check for property values that start with an interpolated value \nIf the first character of the value is a bracket yaml will fail to load \nPlace the value in quotes"
+        puts '*****************'
       end
-      make_pass_table
-      make_warn_table
-      make_fail_table
+      puts make_skip_table
+      puts make_pass_table
+      puts make_warn_table
+      puts make_fail_table
     end
 
     def has_a_test_failed
@@ -39,11 +44,13 @@ module PropertyGenerator
       @files_failing_load.each do |failed|
         rows << [failed]
       end
-      table = Terminal::Table.new :headings => ['Files'], :title => 'Files Failing to Load', :rows => rows, :style => { :width => 200 }
-      puts table
-      puts '*****************'
-      puts "Check for property values that start with an interpolated value \nIf the first character of the value is a bracket yaml will fail to load \nPlace the value in quotes"
-      puts '*****************'
+      Terminal::Table.new :headings => ['Files'], :title => 'Files Failing to Load', :rows => rows, :style => { :width => 200 }
+    end
+
+    def make_skip_table
+      return if @ignored_tests.empty?
+
+      Terminal::Table.new(headings: ['Test'], title: 'Skipped Tests', rows: @ignored_tests.values, style: { width: 200 })
     end
 
     def make_pass_table
@@ -53,8 +60,7 @@ module PropertyGenerator
           rows << [test.gsub('_', ' ')]
         end
       end
-      table = Terminal::Table.new :headings => ['Test'], :title => 'Passing Tests', :rows => rows, :style => { :width => 200 }
-      puts table
+      Terminal::Table.new(headings: ['Test'], title: 'Passing Tests', rows: rows, style: { width: 200 })
     end
 
     def make_warn_table
@@ -64,8 +70,7 @@ module PropertyGenerator
           rows << [test.gsub('_', ' '), status[:error].scan(/.{1,90}/).join("\n")]
         end
       end
-      table = Terminal::Table.new :headings => ['Test', 'Error'], :title => 'Warning Tests', :rows => rows, :style => { :width => 200 }
-      puts table
+      Terminal::Table.new(headings: ['Test', 'Error'], title: 'Warning Tests', rows: rows, style: { width: 200 })
     end
 
     def make_fail_table
@@ -75,8 +80,7 @@ module PropertyGenerator
           rows << [test.gsub('_', ' '), status[:error].scan(/.{1,90}/).join("\n")]
         end
       end
-      table = Terminal::Table.new :headings => ['Test', 'Error'], :title => 'Failing Tests', :rows => rows, :style => { :width => 200 }
-      puts table
+      Terminal::Table.new(headings: ['Test', 'Error'], title: 'Failing Tests', rows: rows, style: { width: 200 })
     end
   end
 end

@@ -1,0 +1,5 @@
+---
+services:
+  - services_have_accepted_keys
+
+display_skipped_tests: true

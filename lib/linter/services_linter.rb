@@ -2,9 +2,19 @@ require_relative '../helpers/helpers'
 module PropertyGenerator
   require 'yaml'
   class ServicesLinter
-    def initialize(path, configs)
+    TESTS = [
+      'services_have_accepted_keys',
+      'service_environments_are_not_empty',
+      'service_environments_match_config_environments',
+      'service_encrypted_environments_match_config_environments',
+      'service_encrypted_fields_are_correct',
+      'service_encrypted_region_field_is_accepted'
+    ].freeze
+
+    def initialize(path, configs, ignored_tests)
       @configs = configs
       @services = {}
+      @ignored_tests = ignored_tests
       valid_paths = PropertyGenerator.valid_paths(path)
       valid_paths.each do |file_path|
         @services[file_path] = YAML.load_file(file_path)
@@ -12,14 +22,7 @@ module PropertyGenerator
     end
 
     def run_services_tests
-      tests = [
-        'services_have_accepted_keys',
-        'service_environments_are_not_empty',
-        'service_environments_match_config_environments',
-        'service_encrypted_environments_match_config_environments',
-        'service_encrypted_fields_are_correct',
-        'service_encrypted_region_field_is_accepted'
-      ]
+      tests = TESTS - @ignored_tests
 
       PropertyGenerator.test_runner(self, tests)
     end
