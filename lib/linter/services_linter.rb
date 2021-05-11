@@ -112,6 +112,16 @@ module PropertyGenerator
       status
     end
 
+    def recursive_find_keys(obj, key)
+      if obj.respond_to?(:key?) && obj.key?(key)
+        obj[key]
+      elsif obj.is_a?(Hash) or obj.is_a?(Array)
+        r = nil
+        obj.find{ |*a| r = recursive_find_keys(a.last,key) }
+        r
+      end
+    end
+
     def service_encrypted_fields_are_correct
       status = { status: 'pass', error: '' }
       accepted_keys = ['region', 'encrypted', 'service', 'label']
@@ -123,23 +133,38 @@ module PropertyGenerator
           properties.each do |property, value|
             if value.nil?
               services_with_unacceptable_keys << { path => { environment => property } }
-            elsif value['$ssm'].nil?
+              next
+            end
+
+            s = recursive_find_keys(value, '$ssm')
+            k = recursive_find_keys(value, '$kms')
+            if s.nil? && k.nil?
               services_with_unacceptable_keys << { path => { environment => property } }
-            else
-              unless value['$ssm'].nil?
-                value['$ssm'].keys.each do |key|
-                  unless accepted_keys.include?(key)
-                    services_with_unacceptable_keys << { path => { environment => property } }
-                  end
+              next
+            end
+
+            unless s.nil?
+              s.keys.each do |key|
+                unless accepted_keys.include?(key)
+                  services_with_unacceptable_keys << { path => { environment => property } }
+                  next
                 end
+              end
+            end
+
+            unless k.nil?
+              if (k.keys & ['region', 'encrypted']).count != 2
+                services_with_unacceptable_keys << { path => { environment => property } }
               end
             end
           end
         end
       end
-      if services_with_unacceptable_keys != []
+      unless services_with_unacceptable_keys.empty?
         status[:status] = 'fail'
-        status[:error] = "Service files: #{services_with_unacceptable_keys} have encrypted properties with bad indentation or keys other than 'region', 'encrypted' or 'label'."
+        status[:error] = "Service files: #{services_with_unacceptable_keys} has an encrypted block without " +
+          "properties, encrypted properties without $kms or $ssm blocks, or encrypted blocks with either bad " +
+          "indentation or incorrect keys."
       end
       status
     end
