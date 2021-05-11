@@ -1,7 +1,6 @@
 module PropertyGenerator
   require 'yaml'
   class Config
-
     attr_accessor :configs
 
     def initialize(project_path)

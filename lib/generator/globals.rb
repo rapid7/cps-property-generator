@@ -14,10 +14,9 @@ module PropertyGenerator
       @globals ||= condense_globals
     end
 
-
     def get_main_global
       top_level = {}
-      if File.exists?("#{@project_path}/globals/globals.yml")
+      if File.exist?("#{@project_path}/globals/globals.yml")
         top_level = YAML.load_file("#{@project_path}/globals/globals.yml")
       end
       top_level
@@ -26,9 +25,10 @@ module PropertyGenerator
     def get_account_globals
       data = {}
       @accounts.each do |account|
-        next unless Dir.exists?("#{@project_path}/globals/accounts/#{account}")
+        next unless Dir.exist?("#{@project_path}/globals/accounts/#{account}")
+
         account_default_file = "#{@project_path}/globals/accounts/#{account}/#{account}.yml"
-        data[account] = YAML.load_file(account_default_file) if File.exists?(account_default_file)
+        data[account] = YAML.load_file(account_default_file) if File.exist?(account_default_file)
       end
       data
     end
@@ -36,14 +36,16 @@ module PropertyGenerator
     def get_environment_globals
       data = {}
       @accounts.each do |account|
-        next unless Dir.exists?("#{@project_path}/globals/accounts/#{account}/environments")
+        next unless Dir.exist?("#{@project_path}/globals/accounts/#{account}/environments")
+
         data[account] = {}
         @environments.each do |env|
-          next unless File.exists?("#{@project_path}/globals/accounts/#{account}/environments/#{env}.yml")
+          next unless File.exist?("#{@project_path}/globals/accounts/#{account}/environments/#{env}.yml")
+
           data[account][env] = YAML.load_file("#{@project_path}/globals/accounts/#{account}/environments/#{env}.yml")
           unless data[account][env]['encrypted'].nil?
             encrypted = data[account][env]['encrypted'].dup
-            not_encrypted = data[account][env].reject { |k,_| k == 'encrypted' }
+            not_encrypted = data[account][env].reject { |k, _| k == 'encrypted' }
             data[account][env] = not_encrypted.deep_merge(encrypted)
           end
         end
@@ -51,8 +53,7 @@ module PropertyGenerator
       data
     end
 
-
-    #merge environment globals with account globals.
+    # merge environment globals with account globals.
     def condense_globals
       condensed = {}
       # get account and the environmental hash's for said account
@@ -62,7 +63,7 @@ module PropertyGenerator
       # nothing to do here if everything is empty
       return condensed if environment_globals.empty? && account_globals.empty? && main_global.empty?
 
-      environment_globals.each do |account, env_global |
+      environment_globals.each do |account, env_global|
         # get the env and the values
         env_global.each do |env, hash|
           account_globals[account] ||= {}
@@ -85,6 +86,5 @@ module PropertyGenerator
       end
       condensed
     end
-
   end
 end

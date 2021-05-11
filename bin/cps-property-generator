@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
-#
 require 'thor'
 require 'yaml'
-require_relative '../lib/generator/generator.rb'
-require_relative '../lib/linter/linter.rb'
-class GeneratorCLI < ::Thor
+require_relative '../lib/generator/generator'
+require_relative '../lib/linter/linter'
 
+class GeneratorCLI < ::Thor
   desc 'generate', 'Generate properties'
   option 'project_path', banner: 'PROJECT_PATH', type: :string, desc: 'Path to the property project to generate properties for'
   option 'output', banner: 'OUTPUT', type: :string, desc: 'Output path for locally dumping generated outputs', :default => '/tmp/'
@@ -16,7 +15,6 @@ class GeneratorCLI < ::Thor
   option 'upload_all', banner: 'UPLOAD_ALL', type: :boolean, desc: 'Whether to upload all envs and accounts to a single bucket', :default => false
 
   def generate
-
     generator = PropertyGenerator::Generator.new(options)
     out = generator.generate
     if options['upload']
