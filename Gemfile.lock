@@ -88,4 +88,4 @@ DEPENDENCIES
   thor-scmversion (= 1.7.0)
 
 BUNDLED WITH
-   2.1.4
+   1.16.6
