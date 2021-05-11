@@ -175,22 +175,36 @@ module PropertyGenerator
       @services.each do |path, loaded|
         next if loaded['encrypted'].nil?
 
-        loaded['encrypted'].each do |environment, property|
-          next if loaded['encrypted'][environment][property].nil?
+        loaded['encrypted'].each do |environment, properties|
+          if loaded['encrypted'][environment].nil?
+            status[:status] = 'error'
+            status[:error] = 'Encrypted properties are missing from the encrypted environment'
+            return status
+          end
 
-          loaded['encrypted'][environment][property].each do |ssm, keys|
+          encrypted_env = loaded['encrypted'][environment]
+
+          # next if encrypted_env[property].nil?
+
+          encrypted_env.each do |property, encrypted_values|
             if @configs['environments'].nil?
               status[:status] = 'warn'
               status[:error] = 'Environments list in config file is missing.'
-            else
-              unless @configs['environments'].include?(loaded['encrypted'][environment][property]['$ssm'][keys]['region'])
+              break
+            end
+
+            %w[$ssm $kms].each do |encryption_type|
+              values = recursive_find_keys(encrypted_values, encryption_type)
+              next if values.nil?
+
+              unless @configs['environments'].include?(values['region'])
                 services_with_unacceptable_keys << { path => { environment => property } }
               end
             end
           end
         end
       end
-      if services_with_unacceptable_keys != []
+      if !services_with_unacceptable_keys.empty? && status[:status] == 'pass'
         status[:status] = 'warn'
         status[:error] = "Service files: #{services_with_unacceptable_keys} have encrypted properties a region field not matching a declared environment in the configs."
       end
