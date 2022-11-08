@@ -7,7 +7,7 @@ module PropertyGenerator
     attr_accessor :ignored_tests, :services_linter, :globals_linter, :config_linter, :report
 
     def initialize(path)
-      ignore_list = %w[README.md .cpsignore Jenkinsfile]
+      ignore_list = %w[README.md .cpsignore Jenkinsfile Gemfile Gemfile.lock]
       invalid_paths = PropertyGenerator.invalid_paths(path, ignore_list)
       begin
         @ignored_tests = YAML.load_file("#{path}/.cpsignore")
