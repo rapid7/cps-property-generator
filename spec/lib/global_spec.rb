@@ -23,6 +23,9 @@ module PropertyGenerator
       expect(global.get_account_globals).to eq({
                                                  123456789012 => {
                                                    'my_account' => 123456789012
+                                                 },
+                                                 987654321098 => {
+                                                   'my_account' => 987654321098
                                                  }
                                                })
     end
