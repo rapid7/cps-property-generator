@@ -73,6 +73,25 @@ module PropertyGenerator
         end
       end
 
+      # If there are no environmental globals and there are account globals we have to merge them in
+      if condensed.empty? && !account_globals.empty?
+        # assemble the account to env mapping
+        mapping = {}
+
+        @environment_configs.each do |env, vals|
+          account = vals["account"]
+          next if account.nil?
+
+          mapping[account] = Array(mapping[account]).push(env)
+        end
+
+        account_globals.each do |account, env_account|
+          mapping[account].each do |env|
+            condensed[env] = env_account
+          end
+        end
+      end
+
       unless main_global.empty?
         # All environments need the main global definitions
         @environments.each do |env|
