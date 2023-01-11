@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 gem 'activesupport', '~> 4.2.11.1'
-gem 'aws-sdk-s3', '~> 1.0.0.rc2'
+gem 'aws-sdk-s3', '~> 1.117.2'
 gem 'rspec'
 gem 'rubocop'
 gem 'rubocop-rspec', require: false
