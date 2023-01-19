@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.executables = %w[cps-property-generator]
   s.bindir      = 'bin'
 
-  s.add_dependency 'activesupport', '~> 4.2.11.1'
+  s.add_dependency 'activesupport', '>= 4.2.11.1', '< 7.0.5.0'
   s.add_dependency 'aws-sdk-s3', '~> 1.117.2'
   s.add_dependency 'terminal-table'
   s.add_dependency 'thor'
