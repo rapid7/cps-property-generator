@@ -1,0 +1,17 @@
+---
+info:
+  title: Cps Property Generator
+  description: Json property generator for https://github.com/rapid7/cps
+  x-cortex-git:
+    github:
+      alias: r7org
+      repository: rapid7/cps-property-generator
+  x-cortex-tag: cps-property-generator
+  x-cortex-type: service
+  x-cortex-groups:
+  - infra
+  x-cortex-domain-parents:
+  - tag: platform-delivery
+openapi: 3.0.1
+servers:
+- url: "/"
