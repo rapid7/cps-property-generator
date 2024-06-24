@@ -26,6 +26,7 @@ pipeline {
             steps {
                 container('ruby') {
                     sh "bundle install"
+                    sh "gem build cps-property-generator.gemspec"
                 }
             }
         }
