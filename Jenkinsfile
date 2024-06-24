@@ -24,7 +24,9 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                echo 'Hello World'
+                container('ruby') {
+                    sh "bundle install"
+                }
             }
         }
     } // End of stages
