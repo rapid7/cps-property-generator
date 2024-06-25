@@ -2,3 +2,4 @@
 cps-property-generator-*.gem
 out/
 
+.bash_history
