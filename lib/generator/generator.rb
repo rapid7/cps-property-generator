@@ -26,7 +26,7 @@ module PropertyGenerator
       output = []
       @service_list.each do |service, path|
         PropertyGenerator.config_enforcer(@configs.environment_configs)
-        service_instance = PropertyGenerator::Service.new(YAML.load_file(path), @configs, @globals)
+        service_instance = PropertyGenerator::Service.new(YAML.load_file(path, permitted_classes: [Time]), @configs, @globals)
         service_instance.service
         service_instance.interpolate
 
