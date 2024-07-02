@@ -88,8 +88,7 @@ module PropertyGenerator
       puts "Uploading: #{file}"
       s3Bucket = s3.bucket(bucket)
       obj = s3Bucket.object("#{account}/#{file_region}/#{filename}")
-      puts s3Bucket.acl
-      if s3Bucket.acl != "BucketOwnerEnforced"
+      if !s3Bucket.acl.grants.any?{|grant| grant.permission == "BucketOwnerEnforced"}
         obj.acl.put({ acl: "bucket-owner-full-control" })
       end
       obj.upload_file(file)
