@@ -89,9 +89,11 @@ module PropertyGenerator
       s3Bucket = s3.bucket(bucket)
       obj = s3Bucket.object("#{account}/#{file_region}/#{filename}")
       if !s3Bucket.acl.grants.any?{|grant| grant.permission == "BucketOwnerEnforced"}
-        obj.acl.put({ acl: "bucket-owner-full-control" })
+        obj.upload_file(file, { acl: "bucket-owner-full-control" })
+      else
+        obj.upload_file(file)
       end
-      obj.upload_file(file)
+
     end
 
     # Force users to specify VPCs for all environments if specified for one environment.
