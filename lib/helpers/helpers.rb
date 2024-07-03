@@ -86,13 +86,8 @@ module PropertyGenerator
       filename = file.split('/').last
       puts "Destination: #{account}/#{file_region}/#{filename}"
       puts "Uploading: #{file}"
-      s3Bucket = s3.bucket(bucket)
-      obj = s3Bucket.object("#{account}/#{file_region}/#{filename}")
-      uploadOpts = {}
-      unless s3Bucket.acl.grants.any?{|grant| grant.permission == "FULL_CONTROL"}
-        uploadOpts["acl"] = "bucket-owner-full-control"
-      end
-      obj.upload_file(file, uploadOpts)
+      obj = s3.bucket(bucket).object("#{account}/#{file_region}/#{filename}")
+      obj.upload_file(file)
     end
 
     # Force users to specify VPCs for all environments if specified for one environment.
