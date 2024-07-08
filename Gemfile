@@ -7,3 +7,4 @@ gem "rubocop-rspec", require: false
 gem "terminal-table"
 gem "thor"
 gem "thor-scmversion"
+gem "drb", "2.0.6"
